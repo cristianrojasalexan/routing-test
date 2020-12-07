@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  phone: MyString
+  email: MyString
+  sprecific_cities: MyText
+  max_stops_amount: MyString
+  vehicle: one
+
+two:
+  name: MyString
+  phone: MyString
+  email: MyString
+  sprecific_cities: MyText
+  max_stops_amount: MyString
+  vehicle: two
