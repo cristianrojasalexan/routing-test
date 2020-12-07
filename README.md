@@ -73,6 +73,15 @@ $ git clone https://github.com/cristianrojasalexan/routing-test
 # Access
 $ cd routing-test
 
+# Install gems
+$ bundle install
+
+# Create database
+$ rails db:setup
+
+# Run migrations
+$ rails db:migrate
+
 # Install dependencies
 $ yarn
 
