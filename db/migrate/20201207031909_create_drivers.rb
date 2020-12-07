@@ -4,7 +4,7 @@ class CreateDrivers < ActiveRecord::Migration[6.0]
       t.string :name
       t.string :phone
       t.string :email
-      t.text :sprecific_cities
+      t.text :specific_cities
       t.integer :max_stops_amount
 
       t.timestamps

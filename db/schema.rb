@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(version: 2020_12_07_034215) do
     t.string "name"
     t.string "phone"
     t.string "email"
-    t.text "sprecific_cities"
+    t.text "specific_cities"
     t.integer "max_stops_amount"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
