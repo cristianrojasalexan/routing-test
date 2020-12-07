@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Starts at:</strong>
+  <%= @route.starts_at %>
+</p>
+
+<p>
+  <strong>Ends at:</strong>
+  <%= @route.ends_at %>
+</p>
+
+<p>
+  <strong>Load type:</strong>
+  <%= @route.load_type %>
+</p>
+
+<p>
+  <strong>Load sum:</strong>
+  <%= @route.load_sum %>
+</p>
+
+<p>
+  <strong>Cities:</strong>
+  <%= @route.cities %>
+</p>
+
+<p>
+  <strong>Stops amount:</strong>
+  <%= @route.stops_amount %>
+</p>
+
+<%= link_to 'Edit', edit_route_path(@route) %> |
+<%= link_to 'Back', routes_path %>

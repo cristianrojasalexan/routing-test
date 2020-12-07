@@ -1,0 +1,47 @@
+<%= form_with(model: route, local: true) do |form| %>
+  <% if route.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(route.errors.count, "error") %> prohibited this route from being saved:</h2>
+
+      <ul>
+        <% route.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :starts_at %>
+    <%= form.text_field :starts_at %>
+  </div>
+
+  <div class="field">
+    <%= form.label :ends_at %>
+    <%= form.text_field :ends_at %>
+  </div>
+
+  <div class="field">
+    <%= form.label :load_type %>
+    <%= form.text_field :load_type %>
+  </div>
+
+  <div class="field">
+    <%= form.label :load_sum %>
+    <%= form.text_field :load_sum %>
+  </div>
+
+  <div class="field">
+    <%= form.label :cities %>
+    <%= form.text_field :cities %>
+  </div>
+
+  <div class="field">
+    <%= form.label :stops_amount %>
+    <%= form.text_field :stops_amount %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
