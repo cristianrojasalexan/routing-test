@@ -68,11 +68,21 @@ class RoutesController < ApplicationController
       assign_route(route, drivers, "first")      
     end
     routes = Route.unassigned_routes
-    drivers = Route.select("driver_id").group(:driver_id).having("count(driver_id) = 1").pluck(:driver_id)
+    drivers = Route.get_drivers_with_a_route
     routes.each do |route|      
       assign_route(route, drivers, "second")
     end
     @routes = Route.all
+  end
+
+  def reset_routes  
+    respond_to do |format|  
+      if Route.all.update_all(driver_id: nil, vehicle_id: nil)
+        format.html { redirect_to routes_path, notice: "Rutas reseteadas." }
+      else
+        format.html { render :new , notice: "error"}
+      end
+    end
   end
 
   private
@@ -118,10 +128,6 @@ class RoutesController < ApplicationController
         end
     
         if !candidate_vehicle.nil?
-          
-        end
-
-        if !candidate_vehicle.nil?
           if route_type == "first"
             if ((cities_ok == true) && 
               (max_stops_amount >= route.stops_amount ) && 
@@ -130,11 +136,8 @@ class RoutesController < ApplicationController
               assigned_driver = candidate_driver  
               assigned_vehicle = candidate_vehicle          
               drivers.delete(driver)
-              break       
-            else
-              assigned_vehicle = nil
-              assigned_driver = nil
-            end
+              break
+            end       
           else
             pre_assigned_route = Route.find_by(driver_id: candidate_driver.id)
             if ((cities_ok == true) && 
@@ -146,11 +149,10 @@ class RoutesController < ApplicationController
               assigned_vehicle = candidate_vehicle          
               drivers.delete(driver)
               break       
-            else
-              assigned_vehicle = nil
-              assigned_driver = nil
             end
-          end          
+          end 
+            assigned_vehicle = nil
+            assigned_driver = nil         
         end
       end
 

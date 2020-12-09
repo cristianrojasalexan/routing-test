@@ -8,11 +8,7 @@ class Route < ApplicationRecord
     Route.where(driver_id: nil, vehicle: nil)
   end
 
-  def self.drivers_ids
-    Route.all.pluck(:driver_id)
-  end
-
-  def self.drivers_with_route
-    Route.where.not(driver_id: nil).pluck(:driver_id)
+  def self.get_drivers_with_a_route
+    Route.select("driver_id").group(:driver_id).having("count(driver_id) = 1").pluck(:driver_id)
   end
 end
