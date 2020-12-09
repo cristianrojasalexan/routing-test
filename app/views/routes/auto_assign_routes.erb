@@ -1,0 +1,29 @@
+<div class="px-5 py-2">
+  <table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th>ID Vehiculo</th>
+        <th>ID Conductor</th>
+        <th>ID Ruta (Hora inicio ruta - Hora fin ruta)</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @routes.each do |route| %>
+        <tr>
+          <% if route.vehicle.nil? %>
+            <td>No asignado</td>
+          <% else %>
+            <td><%= route.vehicle_id %></td>
+          <% end %>
+          <% if route.driver.nil? %>
+            <td>No asignado</td>
+          <% else %>
+            <td><%= route.driver.id %></td>
+          <% end %>
+          <td><%= "#{route.starts_at.strftime("%I:%M%p")} - #{route.ends_at.strftime("%I:%M%p")}" %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

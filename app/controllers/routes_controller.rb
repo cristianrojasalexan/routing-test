@@ -61,7 +61,104 @@ class RoutesController < ApplicationController
     end
   end
 
+  def auto_assign_routes
+    routes = Route.unassigned_routes
+    drivers = Driver.ids_all_drivers_order_by_cities
+    routes.order("starts_at asc").each do |route|
+      assign_route(route, drivers, "first")      
+    end
+    routes = Route.unassigned_routes
+    drivers = Route.select("driver_id").group(:driver_id).having("count(driver_id) = 1").pluck(:driver_id)
+    routes.each do |route|      
+      assign_route(route, drivers, "second")
+    end
+    @routes = Route.all
+  end
+
   private
+
+    def assign_route(route, drivers, route_type)
+      cities_ok = false
+      assigned_driver = nil     
+      assigned_vehicle = nil 
+      candidate_vehicle = nil
+      candidate_driver = nil
+      max_stops_amount= nil
+      drivers.each do |driver|
+
+        candidate_driver = Driver.find(driver)
+        if !candidate_driver.vehicle_id.nil?        
+          candidate_vehicle = candidate_driver.vehicle
+        else
+          if route_type == "first"
+            candidate_vehicle = Vehicle.where.not(id: Route.all.pluck(:vehicle_id))
+                                       .where("capacity >= ? AND load_type = ?",route.load_sum, route.load_type).first
+          else 
+            route_search = Route.find_by(driver_id: candidate_driver.id)
+            candidate_vehicle = Vehicle.find(route_search.vehicle_id)                                     
+          end
+        end
+
+        route.cities.split(",").each do |city|
+          if !candidate_driver.specific_cities.nil?
+            if candidate_driver.specific_cities.include? city
+              cities_ok = true
+            else
+              cities_ok = false
+            end
+          else
+            cities_ok = true
+          end
+        end
+        
+        if candidate_driver.max_stops_amount.nil?
+          max_stops_amount = 99
+        else
+          max_stops_amount = candidate_driver.max_stops_amount
+        end
+    
+        if !candidate_vehicle.nil?
+          
+        end
+
+        if !candidate_vehicle.nil?
+          if route_type == "first"
+            if ((cities_ok == true) && 
+              (max_stops_amount >= route.stops_amount ) && 
+              (candidate_vehicle.capacity >= route.load_sum) && 
+              (route.load_type == candidate_vehicle.load_type))
+              assigned_driver = candidate_driver  
+              assigned_vehicle = candidate_vehicle          
+              drivers.delete(driver)
+              break       
+            else
+              assigned_vehicle = nil
+              assigned_driver = nil
+            end
+          else
+            pre_assigned_route = Route.find_by(driver_id: candidate_driver.id)
+            if ((cities_ok == true) && 
+              (max_stops_amount >= route.stops_amount ) && 
+              (candidate_vehicle.capacity >= route.load_sum) && 
+              (route.load_type == candidate_vehicle.load_type) &&
+              (route.starts_at > pre_assigned_route.ends_at))
+              assigned_driver = candidate_driver  
+              assigned_vehicle = candidate_vehicle          
+              drivers.delete(driver)
+              break       
+            else
+              assigned_vehicle = nil
+              assigned_driver = nil
+            end
+          end          
+        end
+      end
+
+      if (assigned_driver != nil && assigned_vehicle != nil)
+        route.update_columns(vehicle_id: assigned_vehicle.id, driver_id: assigned_driver.id)      
+      end
+    end
+
     # Use callbacks to share common setup or constraints between actions.
     def set_route
       @route = Route.find(params[:id])
