@@ -14,10 +14,9 @@ Route.delete_all
 puts "Destroy Rutas"
 
 # Vechicles
-
-10.times do
+25.times do
   vehicle = Vehicle.new(
-    capacity:  rand(10..40),
+    capacity:  rand(20..60),
     load_type: rand(0..1),
     driver_id: nil
   )
@@ -26,10 +25,9 @@ end
 puts "Vehiculos creados"
 
 # Drivers
-
-10.times do
+25.times do
   driver = Driver.new(
-    name: Faker::Superhero.name,
+    name: Faker::Sports::Football.player,
     phone: Faker::Number.number(digits: 9),
     email: "#{Faker::Superhero.prefix}@correo.cl",
     vehicle_id: nil,
@@ -38,38 +36,38 @@ puts "Vehiculos creados"
   )
   driver.save!
 end
-5.times do
+10.times do
   vehicle = Vehicle.new(
-    capacity:  rand(10..40),
+    capacity:  rand(20..50),
     load_type: rand(0..1),
     driver_id: nil
   )
   vehicle.save!
   driver = Driver.new(
-    name: Faker::Superhero.name,
+    name: Faker::Sports::Football.player,
     phone: Faker::Number.number(digits: 9),
     email: "#{Faker::Superhero.prefix}@correo.cl",
     vehicle_id: vehicle.id,
-    specific_cities: "La Cisterna,San Miguel,El Bosque,San Bernardo,San Ramon",
+    specific_cities: "La Cisterna,San Miguel,El Bosque,San Bernardo,San Ramon,Departamental,Puente Alto,La Florida",
     max_stops_amount: 5
   )
   driver.save!
   vehicle.driver_id = driver.id
   vehicle.save!
 end
-5.times do
+10.times do
   vehicle = Vehicle.new(
-    capacity:  rand(10..40),
+    capacity:  rand(20..60),
     load_type: rand(0..1),
     driver_id: nil
   )
   vehicle.save!
   driver = Driver.new(
-    name: Faker::Superhero.name,
+    name: Faker::Sports::Football.player,
     phone: Faker::Number.number(digits: 9),
     email: "#{Faker::Superhero.prefix}@correo.cl",
     vehicle_id: vehicle.id,
-    specific_cities: "Las Condes,Vitacura,Providencia,La Reina,Ñuñoa",
+    specific_cities: "Las Condes,Vitacura,Providencia,La Reina,Ñuñoa,Santiago,Estacion Central",
     max_stops_amount: 5
   )
   driver.save!
@@ -120,8 +118,8 @@ end
 end
 10.times do
   route = Route.new(
-    starts_at: DateTime.parse("12/07/2020 8:00"),
-    ends_at: DateTime.parse("12/07/2020 13:00"),
+    starts_at: DateTime.parse("12/07/2020 13:30"),
+    ends_at: DateTime.parse("12/07/2020 18:00"),
     load_type: rand(0..1),
     load_sum: rand(10..40),
     cities: "Las Condes,Providencia,Santiago,Estacion Central",
